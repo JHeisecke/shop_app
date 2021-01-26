@@ -12,6 +12,10 @@ class ProductsState with ChangeNotifier {
     return [..._items];
   }
 
+  Product findById(String id) {
+    return _items.firstWhere((e) => e.id == id);
+  }
+
   void addProduct() {
     //_items.add(null);
     notifyListeners();

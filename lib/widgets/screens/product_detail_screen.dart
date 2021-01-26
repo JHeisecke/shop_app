@@ -8,7 +8,7 @@ class ProductDetailScreen extends StatelessWidget {
     final id = ModalRoute.of(context).settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
-        title: Text("nombre"),
+        title: Text(id),
       ),
     );
   }

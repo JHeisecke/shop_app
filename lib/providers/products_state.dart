@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../models/product.dart';
+import './product.dart';
 
 /*
 * We should only change data in this class to notify

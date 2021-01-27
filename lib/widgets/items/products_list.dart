@@ -5,6 +5,9 @@ import '../../providers/products_state.dart';
 import '../items/product_item.dart';
 
 class ProductsGrid extends StatelessWidget {
+  final bool showFavoritesOnly;
+  ProductsGrid(this.showFavoritesOnly);
+
   @override
   Widget build(BuildContext context) {
     /*
@@ -16,7 +19,9 @@ class ProductsGrid extends StatelessWidget {
     because that's where I'm instantiating ChangeNotifier
     */
     final productsData = Provider.of<ProductsState>(context);
-    final loadedProducts = productsData.items; //we use the getter in provider
+    final loadedProducts = showFavoritesOnly
+        ? productsData.favoriteItems
+        : productsData.items; //we use the getter in provider
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       itemCount: loadedProducts.length,

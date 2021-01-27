@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/providers/products_state.dart';
 
 import '../screens/product_detail_screen.dart';
 import '../../providers/product.dart';
@@ -39,8 +38,9 @@ class ProductItem extends StatelessWidget {
         footer: GridTileBar(
           backgroundColor: Colors.black54,
           //only rebuilds this part of the widget,
-          //consumer always listens to changes
-          leading: Consumer<ProductsState>(
+          //consumer always listens to changes, child argument in builder
+          //parameter doesnt get rebuilt
+          leading: Consumer<Product>(
             builder: (context, value, child) => IconButton(
               icon: Icon(productData.isFavorite
                   ? Icons.favorite

@@ -18,16 +18,27 @@ class ProductDetailScreen extends StatelessWidget {
       listen: false,
     ).findById(id);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(product.title),
-      ),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Container(child: Image.network(product.imageUrl, fit: BoxFit.cover), height: 300,width: double.infinity,),
-          SizedBox(height: 20),
-          Text("\$${product.price}", style: TextStyle(color: Colors.grey, fontSize: 20),),
-      ]),
-      ) 
-    );
+        appBar: AppBar(
+          title: Text(product.title),
+        ),
+        body: SingleChildScrollView(
+          child: Column(children: [
+            Container(
+              child: Image.network(product.imageUrl, fit: BoxFit.cover),
+              height: 300,
+              width: double.infinity,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "${product.title}",
+              style: TextStyle(color: Colors.black, fontSize: 22),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "\$${product.price}",
+              style: TextStyle(color: Colors.grey, fontSize: 20),
+            ),
+          ]),
+        ));
   }
 }

@@ -34,9 +34,11 @@ class CartScreen extends StatelessWidget {
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   FlatButton(
-                    onPressed: null,
+                    onPressed: () {
+                      cart.checkoutCart();
+                    },
                     child: Text(
-                      'ORDER NOW!',
+                      'CHECKOUT!',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     textColor: Theme.of(context).primaryColor,

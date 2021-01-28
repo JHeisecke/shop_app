@@ -63,4 +63,10 @@ class Cart with ChangeNotifier {
     _items.remove(productId);
     notifyListeners();
   }
+
+  void checkoutCart() {
+    //cart.items.values.toList(), cart.totalAmount)
+    _items = {};
+    notifyListeners();
+  }
 }

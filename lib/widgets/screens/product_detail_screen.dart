@@ -18,11 +18,12 @@ class ProductDetailScreen extends StatelessWidget {
       listen: false,
     ).findById(id);
     return Scaffold(
-        appBar: AppBar(
-          title: Text(product.title),
-        ),
-        body: SingleChildScrollView(
-          child: Column(children: [
+      appBar: AppBar(
+        title: Text(product.title),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
             Container(
               child: Image.network(product.imageUrl, fit: BoxFit.cover),
               height: 300,
@@ -38,7 +39,21 @@ class ProductDetailScreen extends StatelessWidget {
               "\$${product.price}",
               style: TextStyle(color: Colors.grey, fontSize: 20),
             ),
-          ]),
-        ));
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              width: double.infinity,
+              child: Text(
+                product.description,
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

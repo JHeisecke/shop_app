@@ -64,8 +64,7 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
-  void checkoutCart() {
-    //cart.items.values.toList(), cart.totalAmount)
+  void clearCart() {
     _items = {};
     notifyListeners();
   }

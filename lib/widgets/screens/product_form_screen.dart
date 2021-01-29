@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../providers/product.dart';
+
 class ProductFormScreen extends StatefulWidget {
   static const routeName = "/manage-products";
   @override
@@ -9,6 +11,14 @@ class ProductFormScreen extends StatefulWidget {
 class _ProductFormScreenState extends State<ProductFormScreen> {
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
+  final _form = GlobalKey<FormState>();
+  var product = Product(
+    id: null,
+    title: '',
+    description: '',
+    imageUrl: '',
+    price: 0.0,
+  );
 
   @override
   void initState() {
@@ -29,15 +39,28 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     }
   }
 
+  void _saveForm() {
+    _form.currentState.save();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fomurlario de Productos'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save),
+            onPressed: () {
+              _saveForm();
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
+          key: _form,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -76,6 +99,15 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         onEditingComplete: () {
                           setState(() {});
                         },
+                        onSaved: (imagen) {
+                          product = Product(
+                            id: null,
+                            title: product.title,
+                            description: product.description,
+                            price: product.price,
+                            imageUrl: imagen,
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -83,18 +115,46 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Título'),
                   textInputAction: TextInputAction.next,
+                  onSaved: (titulo) {
+                    product = Product(
+                      id: null,
+                      title: titulo,
+                      description: product.description,
+                      price: product.price,
+                      imageUrl: product.imageUrl,
+                    );
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Precio'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
+                  onSaved: (precio) {
+                    product = Product(
+                      id: null,
+                      title: product.title,
+                      description: product.description,
+                      price: double.parse(precio),
+                      imageUrl: product.imageUrl,
+                    );
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Descripción'),
                   textInputAction: TextInputAction.done,
                   maxLines: 3,
-                  //onFieldSubmitted: (_) => FocusScope.of(context)
-                  // .unfocus(), // submit and hide keyboard
+                  onFieldSubmitted: (_) {
+                    _saveForm();
+                  },
+                  onSaved: (description) {
+                    product = Product(
+                      id: null,
+                      title: product.title,
+                      description: description,
+                      price: product.price,
+                      imageUrl: product.imageUrl,
+                    );
+                  },
                 ),
               ],
             ),

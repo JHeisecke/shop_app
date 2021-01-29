@@ -57,8 +57,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   @override
   void dispose() {
-    _imageUrlFocusNode.dispose();
     _imageUrlFocusNode.removeListener(_updateImageUrl);
+    _imageUrlFocusNode.dispose();
     super.dispose();
   }
 

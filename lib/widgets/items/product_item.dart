@@ -8,6 +8,7 @@ import '../../providers/cart.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
     final productData = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
@@ -63,7 +64,8 @@ class ProductItem extends StatelessWidget {
               onPressed: () {
                 cart.addItem(
                     productData.id, productData.price, productData.title);
-                Scaffold.of(context).showSnackBar(
+                scaffold.hideCurrentSnackBar();
+                scaffold.showSnackBar(
                   SnackBar(
                     content: Text('Se agregó el producto al carrito'),
                     duration: Duration(seconds: 3),

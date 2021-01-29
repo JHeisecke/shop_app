@@ -58,12 +58,25 @@ class ProductItem extends StatelessWidget {
           ),
           trailing: Consumer<Product>(
             builder: (context, value, child) => IconButton(
-                icon: Icon(Icons.shopping_cart),
-                color: Theme.of(context).accentColor,
-                onPressed: () {
-                  cart.addItem(
-                      productData.id, productData.price, productData.title);
-                }),
+              icon: Icon(Icons.shopping_cart),
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                cart.addItem(
+                    productData.id, productData.price, productData.title);
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Se agregó el producto al carrito'),
+                    duration: Duration(seconds: 3),
+                    action: SnackBarAction(
+                      label: 'DESHACER',
+                      onPressed: () {
+                        cart.removeSingleItem(productData.id);
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

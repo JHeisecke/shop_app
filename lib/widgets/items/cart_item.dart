@@ -10,7 +10,7 @@ class CartItem extends StatelessWidget {
   final int quantity;
   final String title;
 
-  CartItem({this.productId ,this.id, this.price, this.quantity, this.title});
+  CartItem({this.productId, this.id, this.price, this.quantity, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -23,30 +23,33 @@ class CartItem extends StatelessWidget {
           child: ListTile(
             leading: CircleAvatar(
               child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: FittedBox(child: Text('\$$price'))
-              ),
+                  padding: const EdgeInsets.all(5),
+                  child: FittedBox(child: Text('\$$price'))),
             ),
             title: Text(title),
-            subtitle: Text('Total \$${price * quantity}'),
+            subtitle: Text('Total \$${(price * quantity).toStringAsFixed(2)}'),
             trailing: Text('$quantity x'),
           ),
         ),
       ),
-      background: Container(color: Theme.of(context).errorColor, child: 
-      Icon(
-        Icons.delete, 
-        color: Colors.white, 
-        size: 40,
+      background: Container(
+        color: Theme.of(context).errorColor,
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+          size: 40,
+        ),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        margin: const EdgeInsets.symmetric(
+          vertical: 4,
+          horizontal: 15,
+        ),
       ),
-      alignment: Alignment.centerRight,
-      padding: const EdgeInsets.only(right: 20),
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 15,),
-    ),
-    direction: DismissDirection.endToStart,
-    onDismissed: (direction) {
-      Provider.of<Cart>(context, listen: false).removeItem(productId);
-    },
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        Provider.of<Cart>(context, listen: false).removeItem(productId);
+      },
     );
   }
 }

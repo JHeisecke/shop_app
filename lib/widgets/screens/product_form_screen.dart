@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../providers/product.dart';
+import '../../providers/products_state.dart';
 
 class ProductFormScreen extends StatefulWidget {
   static const routeName = "/manage-products";
@@ -40,7 +42,18 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   }
 
   void _saveForm() {
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
     _form.currentState.save();
+    Provider.of<ProductsState>(
+      context,
+      listen: false,
+    ).addProduct(
+      product,
+    );
+    Navigator.of(context).pop();
   }
 
   @override
@@ -108,6 +121,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                             imageUrl: imagen,
                           );
                         },
+                        validator: (url) {
+                          if (url == null || url.isEmpty) {
+                            return 'Url es obligatoria.';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ],
@@ -124,6 +143,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       imageUrl: product.imageUrl,
                     );
                   },
+                  validator: (titulo) {
+                    if (titulo == null || titulo.isEmpty) {
+                      return 'Título es obligatorio.';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Precio'),
@@ -137,6 +162,16 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       price: double.parse(precio),
                       imageUrl: product.imageUrl,
                     );
+                  },
+                  validator: (precio) {
+                    if (precio == null || precio.isEmpty) {
+                      return 'Debe agregar un precio.';
+                    }
+                    if (double.tryParse(precio) == null ||
+                        double.parse(precio) < 0) {
+                      return 'Debe ingresar un precio válido';
+                    }
+                    return null;
                   },
                 ),
                 TextFormField(
@@ -154,6 +189,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       price: product.price,
                       imageUrl: product.imageUrl,
                     );
+                  },
+                  validator: (descripcion) {
+                    if (descripcion == null || descripcion.isEmpty) {
+                      return 'Descripción es obligatorio.';
+                    }
+                    return null;
                   },
                 ),
               ],

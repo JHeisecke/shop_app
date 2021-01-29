@@ -5,7 +5,7 @@ import '../../providers/product.dart';
 import '../../providers/products_state.dart';
 
 class ProductFormScreen extends StatefulWidget {
-  static const routeName = "/manage-products";
+  static const routeName = "/products-form";
   @override
   _ProductFormScreenState createState() => _ProductFormScreenState();
 }
@@ -14,7 +14,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
-  var product = Product(
+  var _isInit = true;
+  var _initValues = {
+    'title': '',
+    'description': '',
+    'imageUrl': '',
+    'price': '',
+  };
+  var _product = Product(
     id: null,
     title: '',
     description: '',
@@ -26,6 +33,26 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   void initState() {
     _imageUrlFocusNode.addListener(_updateImageUrl);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final productId = ModalRoute.of(context).settings.arguments as String;
+      if (productId != null) {
+        _product = Provider.of<ProductsState>(context, listen: false)
+            .findById(productId);
+        _initValues = {
+          'title': _product.title,
+          'description': _product.description,
+          'imageUrl': '',
+          'price': _product.price.toString(),
+        };
+        _imageUrlController.text = _product.imageUrl;
+        _isInit = false;
+      }
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -47,12 +74,22 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       return;
     }
     _form.currentState.save();
-    Provider.of<ProductsState>(
-      context,
-      listen: false,
-    ).addProduct(
-      product,
-    );
+    if (_product.id == null) {
+      Provider.of<ProductsState>(
+        context,
+        listen: false,
+      ).addProduct(
+        _product,
+      );
+    } else {
+      Provider.of<ProductsState>(
+        context,
+        listen: false,
+      ).updateProduct(
+        _product,
+      );
+    }
+
     Navigator.of(context).pop();
   }
 
@@ -113,11 +150,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           setState(() {});
                         },
                         onSaved: (imagen) {
-                          product = Product(
-                            id: null,
-                            title: product.title,
-                            description: product.description,
-                            price: product.price,
+                          _product = Product(
+                            id: _product.id,
+                            isFavorite: _product.isFavorite,
+                            title: _product.title,
+                            description: _product.description,
+                            price: _product.price,
                             imageUrl: imagen,
                           );
                         },
@@ -132,15 +170,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   ],
                 ),
                 TextFormField(
+                  initialValue: _initValues['title'],
                   decoration: InputDecoration(labelText: 'Título'),
                   textInputAction: TextInputAction.next,
                   onSaved: (titulo) {
-                    product = Product(
-                      id: null,
+                    _product = Product(
+                      id: _product.id,
+                      isFavorite: _product.isFavorite,
                       title: titulo,
-                      description: product.description,
-                      price: product.price,
-                      imageUrl: product.imageUrl,
+                      description: _product.description,
+                      price: _product.price,
+                      imageUrl: _product.imageUrl,
                     );
                   },
                   validator: (titulo) {
@@ -151,16 +191,18 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['price'],
                   decoration: InputDecoration(labelText: 'Precio'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   onSaved: (precio) {
-                    product = Product(
-                      id: null,
-                      title: product.title,
-                      description: product.description,
+                    _product = Product(
+                      id: _product.id,
+                      isFavorite: _product.isFavorite,
+                      title: _product.title,
+                      description: _product.description,
                       price: double.parse(precio),
-                      imageUrl: product.imageUrl,
+                      imageUrl: _product.imageUrl,
                     );
                   },
                   validator: (precio) {
@@ -175,6 +217,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['description'],
                   decoration: InputDecoration(labelText: 'Descripción'),
                   textInputAction: TextInputAction.done,
                   maxLines: 3,
@@ -182,12 +225,13 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     _saveForm();
                   },
                   onSaved: (description) {
-                    product = Product(
-                      id: null,
-                      title: product.title,
+                    _product = Product(
+                      id: _product.id,
+                      isFavorite: _product.isFavorite,
+                      title: _product.title,
                       description: description,
-                      price: product.price,
-                      imageUrl: product.imageUrl,
+                      price: _product.price,
+                      imageUrl: _product.imageUrl,
                     );
                   },
                   validator: (descripcion) {

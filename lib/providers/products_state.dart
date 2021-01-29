@@ -39,6 +39,11 @@ class ProductsState with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void removeProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
+  }
 }
 
 final products = [

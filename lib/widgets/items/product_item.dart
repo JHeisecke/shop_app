@@ -67,7 +67,8 @@ class ProductItem extends StatelessWidget {
                 scaffold.hideCurrentSnackBar();
                 scaffold.showSnackBar(
                   SnackBar(
-                    content: Text('Se agregó el producto al carrito'),
+                    content:
+                        Text('Se agregó un ${productData.title} al carrito'),
                     duration: Duration(seconds: 3),
                     action: SnackBarAction(
                       label: 'DESHACER',

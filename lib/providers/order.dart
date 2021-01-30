@@ -53,4 +53,33 @@ class Order with ChangeNotifier {
     );
     notifyListeners();
   }
+
+  Future<void> fetchOrders() async {
+    final List<OrderItem> loadedOrders = [];
+    try {
+      final response =
+          await _helper.get(Endpoints.orders) as Map<String, dynamic>;
+      response.forEach((id, orderData) {
+        loadedOrders.add(OrderItem(
+          id: id,
+          amount: orderData['amount'],
+          products: (orderData['products'] as List<dynamic>)
+              .map((e) => CartItem(
+                    id: e['id'],
+                    price: e['price'],
+                    quantity: e['quantity'],
+                    title: e['title'],
+                  ))
+              .toList(),
+          dateTime: DateTime.parse(orderData['dateTime']),
+        ));
+      });
+      _orders = loadedOrders.reversed.toList();
+      notifyListeners();
+    } catch (error) {
+      _orders = [];
+      notifyListeners();
+      throw error;
+    }
+  }
 }

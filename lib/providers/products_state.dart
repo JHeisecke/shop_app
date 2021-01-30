@@ -42,6 +42,8 @@ class ProductsState with ChangeNotifier {
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
+      _items = [];
+      notifyListeners();
       throw error;
     }
   }

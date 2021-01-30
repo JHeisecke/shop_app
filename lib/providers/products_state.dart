@@ -74,9 +74,18 @@ class ProductsState with ChangeNotifier {
     }
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == product.id);
     if (prodIndex >= 0) {
+      final url = Endpoints.product + '${product.id}.json';
+      await _helper.patch(
+          url,
+          json.encode({
+            'title': product.title,
+            'description': product.description,
+            'imageUrl': product.imageUrl,
+            'price': product.price,
+          }));
       _items[prodIndex] = product;
       notifyListeners();
     }

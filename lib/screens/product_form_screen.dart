@@ -81,8 +81,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     if (_product.id == null) {
       try {
         await Provider.of<ProductsState>(context, listen: false)
-            .addProduct(_product)
-            .catchError((error) {});
+            .addProduct(_product);
       } catch (error) {
         await showDialog(
           context: context,
@@ -98,17 +97,16 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             ],
           ),
         );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pop();
       }
     } else {
-      Provider.of<ProductsState>(context, listen: false).updateProduct(
+      await Provider.of<ProductsState>(context, listen: false).updateProduct(
         _product,
       );
     }
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
   }
 
   @override

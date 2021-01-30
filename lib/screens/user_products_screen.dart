@@ -8,6 +8,12 @@ import '../widgets/app_drawer.dart';
 
 class UserProductsScreen extends StatelessWidget {
   static const routeName = '/manage-products';
+
+  Future<void> _refreshProducts(BuildContext context) async {
+    //we dont want to listen to updates with this provider, only when is used
+    Provider.of<ProductsState>(context, listen: false).fetchProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<ProductsState>(context);
@@ -24,22 +30,25 @@ class UserProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListView.builder(
-            itemCount: productsData.items.length,
-            itemBuilder: (_, i) {
-              return Column(
-                children: [
-                  UserProductItem(
-                    productsData.items[i].id,
-                    productsData.items[i].title,
-                    productsData.items[i].imageUrl,
-                  ),
-                  Divider(),
-                ],
-              );
-            }),
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListView.builder(
+              itemCount: productsData.items.length,
+              itemBuilder: (_, i) {
+                return Column(
+                  children: [
+                    UserProductItem(
+                      productsData.items[i].id,
+                      productsData.items[i].title,
+                      productsData.items[i].imageUrl,
+                    ),
+                    Divider(),
+                  ],
+                );
+              }),
+        ),
       ),
     );
   }

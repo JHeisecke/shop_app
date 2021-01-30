@@ -69,7 +69,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
@@ -79,13 +79,16 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       _isLoading = true;
     });
     if (_product.id == null) {
-      Provider.of<ProductsState>(context, listen: false)
-          .addProduct(_product)
-          .catchError((error) {
-        showDialog(
+      try {
+        await Provider.of<ProductsState>(context, listen: false)
+            .addProduct(_product)
+            .catchError((error) {});
+      } catch (error) {
+        await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text('Ocurrió un error'),
+            title: Text('Ocurrió un error :('),
+            content: Text('Comuníquese con el administrador del sistema'),
             actions: [
               FlatButton(
                   onPressed: () {
@@ -95,12 +98,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             ],
           ),
         );
-      }).then((value) {
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      });
+      }
     } else {
       Provider.of<ProductsState>(context, listen: false).updateProduct(
         _product,

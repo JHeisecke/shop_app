@@ -11,7 +11,7 @@ class RestApiService {
       responseJson = _returnResponse(response);
     } on SocketException {
       //throw FetchDataException('No Internet connection');
-      print('No hay conexión a internet');
+      throw Exception('No hay conexión a internet');
     }
     return responseJson;
   }
@@ -23,7 +23,7 @@ class RestApiService {
       responseJson = _returnResponse(response);
     } on SocketException {
       //throw FetchDataException('No Internet connection');
-      print('No hay conexión a internet');
+      throw Exception('No hay conexión a internet');
     }
 
     return responseJson;
@@ -36,7 +36,7 @@ class RestApiService {
       responseJson = _returnResponse(response);
     } on SocketException {
       //throw FetchDataException('No Internet connection');
-      print('No hay conexión a internet');
+      throw Exception('No hay conexión a internet');
     }
 
     return responseJson;

@@ -24,19 +24,19 @@ class ProductsState with ChangeNotifier {
     return _items.firstWhere((e) => e.id == id);
   }
 
-  Future<void> addProduct(Product product) {
-    return _helper
-        .post(
-      Endpoints.products,
-      json.encode({
-        'title': product.title,
-        'description': product.description,
-        'imageUrl': product.imageUrl,
-        'price': product.price,
-        'isFavorite': product.isFavorite,
-      }),
-    )
-        .then((response) {
+  Future<void> addProduct(Product product) async {
+    try {
+      final response = await _helper.post(
+        Endpoints.products,
+        json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
+
       final newProduct = Product(
         id: response['name'],
         title: product.title,
@@ -44,11 +44,12 @@ class ProductsState with ChangeNotifier {
         price: product.price,
         imageUrl: product.imageUrl,
       );
+
       _items.add(newProduct);
       notifyListeners();
-    }).catchError((error) {
+    } catch (error) {
       throw error;
-    });
+    }
   }
 
   void updateProduct(Product product) {

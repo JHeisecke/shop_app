@@ -91,8 +91,21 @@ class ProductsState with ChangeNotifier {
     }
   }
 
+  /*
+  * Removemos el prod de la lista y hacemos una copia, hacemos la peticion
+  * y si no funciona agregamos nuevamente la copia a la lista
+  */
   void removeProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+    //optimistic updating
+    final url = Endpoints.product + '${id}.json';
+    final copyProductId = _items.indexWhere((prod) => prod.id == id);
+    var copyProduct = _items[copyProductId];
+    _items.removeAt(copyProductId);
+    _helper.delete(url).then((_) {
+      copyProduct = null;
+    }).catchError((_) {
+      _items.insert(copyProductId, copyProduct);
+    });
     notifyListeners();
   }
 }

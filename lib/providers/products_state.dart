@@ -23,8 +23,8 @@ class ProductsState with ChangeNotifier {
     return _items.firstWhere((e) => e.id == id);
   }
 
-  void addProduct(Product product) {
-    _helper
+  Future<void> addProduct(Product product) {
+    return _helper
         .post(
       "products.json",
       json.encode({

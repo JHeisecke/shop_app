@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 import './providers/cart.dart';
 import './providers/order.dart';
 import './providers/products_state.dart';
-import './widgets/screens/orders_screen.dart';
-import './widgets/screens/products_screen.dart';
-import './widgets/screens/product_detail_screen.dart';
-import './widgets/screens/cart_screen.dart';
-import './widgets/screens/user_products_screen.dart';
-import './widgets/screens/product_form_screen.dart';
+import './screens/orders_screen.dart';
+import './screens/products_screen.dart';
+import './screens/product_detail_screen.dart';
+import './screens/cart_screen.dart';
+import './screens/user_products_screen.dart';
+import './screens/product_form_screen.dart';
 
 void main() {
   runApp(MyApp());

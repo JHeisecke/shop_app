@@ -48,8 +48,8 @@ class RestApiService {
       final response = await http.delete(Endpoints.baseUrl + url);
       apiResponse = _returnResponse(response);
     } on SocketException {
+      throw Exception('No hay conexión a internet');
       //throw FetchDataException('No Internet connection');
-      print('No hay conexión a internet');
     }
 
     return apiResponse;
@@ -64,22 +64,27 @@ dynamic _returnResponse(http.Response response) {
       return responseJson;
     case 400:
       print(response.body.toString());
+      throw Exception(response.body.toString());
       break;
-    //throw BadRequestException(response.body.toString());
+    //throw BadRequestException();
     case 401:
       print(response.body.toString());
+      throw Exception(response.body.toString());
       break;
     case 403:
       print(response.body.toString());
+      throw Exception(response.body.toString());
       break;
     //throw UnauthorisedException(response.body.toString());
     case 500:
       print(response.body.toString());
+      throw Exception(response.body.toString());
       break;
     default:
-      print('Ocurrio un error inesperado');
+      throw Exception(
+          'Error occured while Communication with Server with StatusCode :' +
+              '${response.statusCode}');
     //throw FetchDataException(
-    //'Error occured while Communication with Server with StatusCode :
-    //${response.statusCode}');
+    //);
   }
 }

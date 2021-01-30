@@ -81,7 +81,21 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     if (_product.id == null) {
       Provider.of<ProductsState>(context, listen: false)
           .addProduct(_product)
-          .then((value) {
+          .catchError((error) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('Ocurrió un error'),
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Aceptar'))
+            ],
+          ),
+        );
+      }).then((value) {
         setState(() {
           _isLoading = false;
         });

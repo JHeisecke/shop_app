@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import './product.dart';
 import '../api/rest_api_service.dart';
+import '../constants/endpoints.dart';
 
 /*
 * We should only change data in this class to notify
@@ -26,7 +27,7 @@ class ProductsState with ChangeNotifier {
   Future<void> addProduct(Product product) {
     return _helper
         .post(
-      "products.json",
+      Endpoints.products,
       json.encode({
         'title': product.title,
         'description': product.description,

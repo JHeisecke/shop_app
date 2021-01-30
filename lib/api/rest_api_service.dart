@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../constants/endpoints.dart';
+import '../models/fetch_data_exception.dart';
 
 class RestApiService {
   Future<dynamic> get(String url) async {
@@ -10,8 +11,7 @@ class RestApiService {
       final response = await http.get(Endpoints.baseUrl + url);
       responseJson = _returnResponse(response);
     } on SocketException {
-      //throw FetchDataException('No Internet connection');
-      throw Exception('No hay conexión a internet');
+      throw FetchDataException('No hay conexión a internet');
     }
     return responseJson;
   }
@@ -22,8 +22,7 @@ class RestApiService {
       final response = await http.post(Endpoints.baseUrl + url, body: body);
       responseJson = _returnResponse(response);
     } on SocketException {
-      //throw FetchDataException('No Internet connection');
-      throw Exception('No hay conexión a internet');
+      throw FetchDataException('No hay conexión a internet');
     }
 
     return responseJson;
@@ -35,8 +34,7 @@ class RestApiService {
       final response = await http.put(Endpoints.baseUrl + url, body: body);
       responseJson = _returnResponse(response);
     } on SocketException {
-      //throw FetchDataException('No Internet connection');
-      throw Exception('No hay conexión a internet');
+      throw FetchDataException('No hay conexión a internet');
     }
     return responseJson;
   }
@@ -47,8 +45,7 @@ class RestApiService {
       final response = await http.patch(Endpoints.baseUrl + url, body: body);
       responseJson = _returnResponse(response);
     } on SocketException {
-      //throw FetchDataException('No Internet connection');
-      throw Exception('No hay conexión a internet');
+      throw FetchDataException('No hay conexión a internet');
     }
     return responseJson;
   }
@@ -59,8 +56,7 @@ class RestApiService {
       final response = await http.delete(Endpoints.baseUrl + url);
       apiResponse = _returnResponse(response);
     } on SocketException {
-      throw Exception('No hay conexión a internet');
-      //throw FetchDataException('No Internet connection');
+      throw FetchDataException('No hay conexión a internet');
     }
 
     return apiResponse;

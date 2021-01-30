@@ -40,7 +40,7 @@ class UserProductItem extends StatelessWidget {
                 } catch (error) {
                   scaffold.showSnackBar(
                     SnackBar(
-                      content: Text('No se pudo borrar'),
+                      content: Center(child: Text('No se pudo borrar')),
                     ),
                   );
                 }

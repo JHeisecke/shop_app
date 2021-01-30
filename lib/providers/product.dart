@@ -1,4 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+
+import '../api/rest_api_service.dart';
+import '../constants/endpoints.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -16,9 +20,22 @@ class Product with ChangeNotifier {
     @required this.imageUrl,
     this.isFavorite = false, //initiliaze isFavorite with false per default
   });
+  RestApiService _helper = RestApiService();
 
-  void toggleFavoriteStatus() {
+  Future<void> toggleFavoriteStatus(String id) async {
+    final copyIsFavorite = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
+    final url = Endpoints.product + '$id.json';
+    await _helper
+        .patch(
+            url,
+            json.encode({
+              'isFavorite': isFavorite,
+            }))
+        .catchError((_) {
+      isFavorite = copyIsFavorite;
+      notifyListeners();
+    });
   }
 }

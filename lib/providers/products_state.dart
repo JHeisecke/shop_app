@@ -1,11 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 import './product.dart';
+import '../api/rest_api_service.dart';
 
 /*
 * We should only change data in this class to notify
 */
 class ProductsState with ChangeNotifier {
+  RestApiService _helper = RestApiService();
   List<Product> _items = products;
 
   List<Product> get items {
@@ -21,15 +24,28 @@ class ProductsState with ChangeNotifier {
   }
 
   void addProduct(Product product) {
-    final newProduct = Product(
-      id: DateTime.now().toString(),
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageUrl: product.imageUrl,
-    );
-    _items.add(newProduct);
-    notifyListeners();
+    _helper
+        .post(
+      "products.json",
+      json.encode({
+        'title': product.title,
+        'description': product.description,
+        'imageUrl': product.imageUrl,
+        'price': product.price,
+        'isFavorite': product.isFavorite,
+      }),
+    )
+        .then((response) {
+      final newProduct = Product(
+        id: response['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
+      _items.add(newProduct);
+      notifyListeners();
+    });
   }
 
   void updateProduct(Product product) {

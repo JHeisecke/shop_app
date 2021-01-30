@@ -75,17 +75,11 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     }
     _form.currentState.save();
     if (_product.id == null) {
-      Provider.of<ProductsState>(
-        context,
-        listen: false,
-      ).addProduct(
+      Provider.of<ProductsState>(context, listen: false).addProduct(
         _product,
       );
     } else {
-      Provider.of<ProductsState>(
-        context,
-        listen: false,
-      ).updateProduct(
+      Provider.of<ProductsState>(context, listen: false).updateProduct(
         _product,
       );
     }

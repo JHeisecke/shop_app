@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
+import '../constants/endpoints.dart';
 
 class RestApiService {
-  final _baseUrl =
-      'https://flutter-shop-app-80b97-default-rtdb.firebaseio.com/';
-
   Future<dynamic> get(String url) async {
     var responseJson;
     try {
-      final response = await http.get(_baseUrl + url);
+      final response = await http.get(endpoints.baseUrl + url);
       responseJson = _returnResponse(response);
     } on SocketException {
       //throw FetchDataException('No Internet connection');
@@ -22,7 +19,7 @@ class RestApiService {
   Future<dynamic> post(String url, dynamic body) async {
     var responseJson;
     try {
-      final response = await http.post(_baseUrl + url, body: body);
+      final response = await http.post(endpoints.baseUrl + url, body: body);
       responseJson = _returnResponse(response);
     } on SocketException {
       //throw FetchDataException('No Internet connection');
@@ -35,7 +32,7 @@ class RestApiService {
   Future<dynamic> put(String url, dynamic body) async {
     var responseJson;
     try {
-      final response = await http.put(_baseUrl + url, body: body);
+      final response = await http.put(endpoints.baseUrl + url, body: body);
       responseJson = _returnResponse(response);
     } on SocketException {
       //throw FetchDataException('No Internet connection');
@@ -48,7 +45,7 @@ class RestApiService {
   Future<dynamic> delete(String url) async {
     var apiResponse;
     try {
-      final response = await http.delete(_baseUrl + url);
+      final response = await http.delete(endpoints.baseUrl + url);
       apiResponse = _returnResponse(response);
     } on SocketException {
       //throw FetchDataException('No Internet connection');

@@ -32,7 +32,8 @@ class ProductsGrid extends StatelessWidget {
         mainAxisSpacing: 10,
       ),
       itemBuilder: (context, i) => ChangeNotifierProvider.value(
-        value: products[i], //otra sintaxis para usar el ChangeNotifierProvider
+        value: loadedProducts[
+            i], //otra sintaxis para usar el ChangeNotifierProvider
         //en el caso que no uses context y tiene otra caracteristica para ver
         //al reusar un objeto es mejor usar .value
         child: ProductItem(),

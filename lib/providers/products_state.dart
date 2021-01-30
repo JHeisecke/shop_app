@@ -10,7 +10,7 @@ import '../constants/endpoints.dart';
 */
 class ProductsState with ChangeNotifier {
   RestApiService _helper = RestApiService();
-  List<Product> _items = products;
+  List<Product> _items = [];
 
   List<Product> get items {
     return [..._items];
@@ -22,6 +22,28 @@ class ProductsState with ChangeNotifier {
 
   Product findById(String id) {
     return _items.firstWhere((e) => e.id == id);
+  }
+
+  Future<void> fetchProducts() async {
+    try {
+      final response =
+          await _helper.get(Endpoints.products) as Map<String, dynamic>;
+      final List<Product> loadedProducts = [];
+      response.forEach((key, product) {
+        loadedProducts.add(Product(
+          id: key,
+          title: product['title'],
+          description: product['description'],
+          price: product['price'],
+          imageUrl: product['imageUrl'],
+          isFavorite: product['isFavorite'],
+        ));
+      });
+      _items = loadedProducts;
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
   }
 
   Future<void> addProduct(Product product) async {
@@ -66,7 +88,7 @@ class ProductsState with ChangeNotifier {
   }
 }
 
-final products = [
+/*final products = [
   Product(
     id: 'p1',
     title: 'Red Shirt',
@@ -98,4 +120,4 @@ final products = [
     imageUrl:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
   ),
-];
+];*/

@@ -38,7 +38,18 @@ class RestApiService {
       //throw FetchDataException('No Internet connection');
       throw Exception('No hay conexión a internet');
     }
+    return responseJson;
+  }
 
+  Future<dynamic> patch(String url, dynamic body) async {
+    var responseJson;
+    try {
+      final response = await http.patch(Endpoints.baseUrl + url, body: body);
+      responseJson = _returnResponse(response);
+    } on SocketException {
+      //throw FetchDataException('No Internet connection');
+      throw Exception('No hay conexión a internet');
+    }
     return responseJson;
   }
 

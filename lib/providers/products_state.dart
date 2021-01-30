@@ -97,7 +97,7 @@ class ProductsState with ChangeNotifier {
   */
   void removeProduct(String id) {
     //optimistic updating
-    final url = Endpoints.product + '${id}.json';
+    final url = Endpoints.product + '$id.json';
     final copyProductId = _items.indexWhere((prod) => prod.id == id);
     var copyProduct = _items[copyProductId];
     _items.removeAt(copyProductId);

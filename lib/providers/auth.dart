@@ -12,9 +12,17 @@ class Auth with ChangeNotifier {
   RestApiService _helper = RestApiService();
 
   Future<void> signUp(String email, String password) async {
+    return _authenticate(email, password, Endpoints.signUp);
+  }
+
+  Future<void> logIn(String email, String password) async {
+    return _authenticate(email, password, Endpoints.login);
+  }
+
+  Future<void> _authenticate(String email, String password, String url) async {
     try {
       final response = await _helper.post(
-        Endpoints.authUrl,
+        url,
         json.encode({
           'email': email,
           'password': password,
@@ -25,6 +33,5 @@ class Auth with ChangeNotifier {
     } catch (error) {
       print(error);
     }
-    // return _authenticate(email, password, 'signUp');
   }
 }

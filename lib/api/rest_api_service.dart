@@ -19,7 +19,7 @@ class RestApiService {
   Future<dynamic> post(String url, dynamic body) async {
     var responseJson;
     try {
-      final response = await http.post(Endpoints.baseUrl + url, body: body);
+      final response = await http.post(url, body: body);
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No hay conexión a internet');

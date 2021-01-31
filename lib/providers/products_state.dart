@@ -51,7 +51,7 @@ class ProductsState with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     try {
       final response = await _helper.post(
-        Endpoints.products,
+        Endpoints.baseUrl + Endpoints.products,
         json.encode({
           'title': product.title,
           'description': product.description,

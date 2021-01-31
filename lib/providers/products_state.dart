@@ -12,8 +12,8 @@ class ProductsState with ChangeNotifier {
   RestApiService _helper = RestApiService();
   List<Product> _items = [];
   final String authToken;
-
-  ProductsState(this.authToken, _items);
+  final String userId;
+  ProductsState(this.userId, this.authToken, _items);
 
   List<Product> get items {
     return [..._items];
@@ -31,6 +31,8 @@ class ProductsState with ChangeNotifier {
     try {
       final response = await _helper
           .get(Endpoints.products + '?auth=$authToken') as Map<String, dynamic>;
+      final favResponse = await _helper
+          .get('${Endpoints.userFavorites}/$userId.json?auth=$authToken');
       final List<Product> loadedProducts = [];
       response.forEach((key, product) {
         loadedProducts.add(Product(
@@ -39,7 +41,7 @@ class ProductsState with ChangeNotifier {
           description: product['description'],
           price: product['price'],
           imageUrl: product['imageUrl'],
-          isFavorite: product['isFavorite'],
+          isFavorite: favResponse == null ? false : favResponse[key] ?? false,
         ));
       });
       _items = loadedProducts;
@@ -60,7 +62,6 @@ class ProductsState with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          'isFavorite': product.isFavorite,
         }),
       );
 

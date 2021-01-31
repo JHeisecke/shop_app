@@ -28,9 +28,11 @@ class MyApp extends StatelessWidget {
         ),
         //produtcs se vuelve dependiente de Auth
         ChangeNotifierProxyProvider<Auth, ProductsState>(
-          update: (ctx, auth, previousProducts) => ProductsState(auth.token,
+          update: (ctx, auth, previousProducts) => ProductsState(
+              auth.userId,
+              auth.token,
               previousProducts.items == null ? [] : previousProducts.items),
-          create: (_) => ProductsState('', []),
+          create: (_) => ProductsState('', '', []),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Cart(),

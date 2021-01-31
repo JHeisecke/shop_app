@@ -22,11 +22,11 @@ class Product with ChangeNotifier {
   });
   RestApiService _helper = RestApiService();
 
-  Future<void> toggleFavoriteStatus(String id) async {
+  Future<void> toggleFavoriteStatus(String id, String token) async {
     final copyIsFavorite = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
-    final url = Endpoints.product + '$id.json';
+    final url = Endpoints.product + '$id.json' + '?auth=$token';
     await _helper
         .patch(
             url,

@@ -35,8 +35,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => Order(),
+        //produtcs se vuelve dependiente de Auth
+        ChangeNotifierProxyProvider<Auth, Order>(
+          update: (ctx, auth, previousOrders) => Order(auth.token,
+              previousOrders.orders == null ? [] : previousOrders.orders),
+          create: (_) => Order('', []),
         ),
       ],
       //MaterialApp es rebuilt cuando Auth cambia

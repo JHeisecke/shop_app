@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import '../constants/endpoints.dart';
 import '../models/fetch_data_exception.dart';
+import '../models/bad_request_exception.dart';
 
 class RestApiService {
   Future<dynamic> get(String url) async {
@@ -71,9 +71,7 @@ dynamic _returnResponse(http.Response response) {
       return responseJson;
     case 400:
       print(response.body.toString());
-      throw Exception(response.body.toString());
-      break;
-    //throw BadRequestException();
+      throw BadRequestException(response.body);
     case 401:
       print(response.body.toString());
       throw Exception(response.body.toString());

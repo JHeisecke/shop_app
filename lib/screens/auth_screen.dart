@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'package:provider/provider.dart';
-
 import 'package:flutter/material.dart';
+
 import '../providers/auth.dart';
+import '../models/bad_request_exception.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -99,6 +100,24 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Ocurrió un error!"),
+        content: Text(message),
+        actions: [
+          FlatButton(
+            child: Text("Aceptar"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
@@ -108,18 +127,37 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      // Log user in
-      await Provider.of<Auth>(context, listen: false).logIn(
-        _authData['email'],
-        _authData['password'],
-      );
-    } else {
-      // Sign user up
-      await Provider.of<Auth>(context, listen: false).signUp(
-        _authData['email'],
-        _authData['password'],
-      );
+    try {
+      if (_authMode == AuthMode.Login) {
+        // Log user in
+        await Provider.of<Auth>(context, listen: false).logIn(
+          _authData['email'],
+          _authData['password'],
+        );
+      } else {
+        // Sign user up
+        await Provider.of<Auth>(context, listen: false).signUp(
+          _authData['email'],
+          _authData['password'],
+        );
+      }
+    } on BadRequestException catch (error) {
+      var errorMessage = "Error al autenticarse";
+      if (error.toString().contains("EMAIL_EXISTS")) {
+        errorMessage = "Este correo ya existe!";
+      } else if (error.toString().contains("INVALID_EMAIL")) {
+        errorMessage = "Este correo no es válido!";
+      } else if (error.toString().contains("WEAK_PASSWORD")) {
+        errorMessage = "Esta contraseña es muy débil.";
+      } else if (error.toString().contains("INVALID_PASSWORD")) {
+        errorMessage = "Contraseña inválida.";
+      } else if (error.toString().contains("EMAIL_NOT_FOUND")) {
+        errorMessage = "Correo no encontrado.";
+      }
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      var errorMessage = "Error al autenticarse";
+      _showErrorDialog(errorMessage);
     }
     setState(() {
       _isLoading = false;

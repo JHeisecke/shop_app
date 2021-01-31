@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import '../api/rest_api_service.dart';
 import '../constants/endpoints.dart';
+import '../models/bad_request_exception.dart';
 
 class Auth with ChangeNotifier {
   String _token;
@@ -29,9 +30,11 @@ class Auth with ChangeNotifier {
           'returnSecureToken': true,
         }),
       );
-      print(response);
+      if (response['error'] != null) {
+        throw BadRequestException(response['error']['message']);
+      }
     } catch (error) {
-      print(error);
+      throw error;
     }
   }
 }

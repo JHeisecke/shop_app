@@ -29,7 +29,7 @@ class Order with ChangeNotifier {
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final timestamp = DateTime.now();
     final response = await _helper.post(
-        Endpoints.baseUrl + Endpoints.orders,
+        Endpoints.orders,
         json.encode({
           'amount': total,
           'dateTime': timestamp.toIso8601String(),

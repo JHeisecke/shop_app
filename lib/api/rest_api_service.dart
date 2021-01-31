@@ -8,7 +8,7 @@ class RestApiService {
   Future<dynamic> get(String url) async {
     var responseJson;
     try {
-      final response = await http.get(Endpoints.baseUrl + url);
+      final response = await http.get(url);
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No hay conexión a internet');
@@ -31,7 +31,7 @@ class RestApiService {
   Future<dynamic> put(String url, dynamic body) async {
     var responseJson;
     try {
-      final response = await http.put(Endpoints.baseUrl + url, body: body);
+      final response = await http.put(url, body: body);
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No hay conexión a internet');
@@ -42,7 +42,7 @@ class RestApiService {
   Future<dynamic> patch(String url, dynamic body) async {
     var responseJson;
     try {
-      final response = await http.patch(Endpoints.baseUrl + url, body: body);
+      final response = await http.patch(url, body: body);
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No hay conexión a internet');
@@ -53,7 +53,7 @@ class RestApiService {
   Future<dynamic> delete(String url) async {
     var apiResponse;
     try {
-      final response = await http.delete(Endpoints.baseUrl + url);
+      final response = await http.delete(url);
       apiResponse = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No hay conexión a internet');

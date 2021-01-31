@@ -33,11 +33,14 @@ class ProductItem extends StatelessWidget {
                     offset: Offset(0, 6))
               ],
             ),
-            child: FadeInImage(
-                placeholder:
-                    AssetImage("assets/images/product-placeholder.png"),
-                image: NetworkImage(productData.imageUrl),
-                fit: BoxFit.cover),
+            child: Hero(
+              tag: productData.id,
+              child: FadeInImage(
+                  placeholder:
+                      AssetImage("assets/images/product-placeholder.png"),
+                  image: NetworkImage(productData.imageUrl),
+                  fit: BoxFit.cover),
+            ),
           ),
         ),
         footer: GridTileBar(

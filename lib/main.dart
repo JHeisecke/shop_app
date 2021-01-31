@@ -10,6 +10,7 @@ import './screens/product_detail_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/user_products_screen.dart';
 import './screens/product_form_screen.dart';
+import './screens/auth_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,13 +39,14 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.tealAccent,
           fontFamily: 'Lato',
         ),
-        home: ProductsScreen(),
+        home: AuthScreen(),
         routes: {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
           UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
           ProductFormScreen.routeName: (ctx) => ProductFormScreen(),
+          //ProductsScreen.routeName: (ctx) => ProductsScreen(),
         },
       ),
     );

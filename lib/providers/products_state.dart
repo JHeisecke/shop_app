@@ -27,12 +27,14 @@ class ProductsState with ChangeNotifier {
     return _items.firstWhere((e) => e.id == id);
   }
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchProducts([bool filterByUser = false]) async {
     try {
       final response = await _helper
           .get(Endpoints.products + '?auth=$authToken') as Map<String, dynamic>;
-      final favResponse = await _helper
-          .get('${Endpoints.userFavorites}/$userId.json?auth=$authToken');
+      var filterString =
+          filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+      final favResponse = await _helper.get(
+          '${Endpoints.userFavorites}/$userId.json?auth=$authToken&$filterString');
       final List<Product> loadedProducts = [];
       response.forEach((key, product) {
         loadedProducts.add(Product(
@@ -62,6 +64,7 @@ class ProductsState with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
+          'creatorId': userId
         }),
       );
 

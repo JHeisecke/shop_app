@@ -12,6 +12,8 @@ class Product with ChangeNotifier {
   final String imageUrl;
   bool isFavorite; //not final bc it can change
 
+  RestApiService _helper = RestApiService();
+
   Product({
     @required this.id,
     @required this.title,
@@ -20,7 +22,6 @@ class Product with ChangeNotifier {
     @required this.imageUrl,
     this.isFavorite = false, //initiliaze isFavorite with false per default
   });
-  RestApiService _helper = RestApiService();
 
   Future<void> toggleFavoriteStatus(
       String id, String token, String userId) async {

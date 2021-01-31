@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
         ),
         //produtcs se vuelve dependiente de Auth
         ChangeNotifierProxyProvider<Auth, Order>(
-          update: (ctx, auth, previousOrders) => Order(auth.token,
+          update: (ctx, auth, previousOrders) => Order(auth.userId, auth.token,
               previousOrders.orders == null ? [] : previousOrders.orders),
-          create: (_) => Order('', []),
+          create: (_) => Order('', '', []),
         ),
       ],
       //MaterialApp es rebuilt cuando Auth cambia

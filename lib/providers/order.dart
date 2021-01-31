@@ -23,8 +23,9 @@ class Order with ChangeNotifier {
   List<OrderItem> _orders = [];
   RestApiService _helper = RestApiService();
   final String authToken;
+  final String userId;
 
-  Order(this.authToken, _orders);
+  Order(this.userId, this.authToken, _orders);
 
   List<OrderItem> get orders {
     return [..._orders];
@@ -33,7 +34,7 @@ class Order with ChangeNotifier {
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final timestamp = DateTime.now();
     final response = await _helper.post(
-        Endpoints.orders + '?auth=$authToken',
+        Endpoints.orders + '/$userId.json?auth=$authToken',
         json.encode({
           'amount': total,
           'dateTime': timestamp.toIso8601String(),
@@ -61,8 +62,9 @@ class Order with ChangeNotifier {
   Future<void> fetchOrders() async {
     final List<OrderItem> loadedOrders = [];
     try {
-      final response = await _helper.get(Endpoints.orders + '?auth=$authToken')
-          as Map<String, dynamic>;
+      final response =
+          await _helper.get(Endpoints.orders + '/$userId.json?auth=$authToken')
+              as Map<String, dynamic>;
       response.forEach((id, orderData) {
         loadedOrders.add(OrderItem(
           id: id,

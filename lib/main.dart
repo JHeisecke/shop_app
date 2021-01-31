@@ -24,16 +24,19 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => ProductsState(),
+          create: (ctx) => Auth(),
+        ),
+        //produtcs se vuelve dependiente de Auth
+        ChangeNotifierProxyProvider<Auth, ProductsState>(
+          update: (ctx, auth, previousProducts) => ProductsState(auth.token,
+              previousProducts.items == null ? [] : previousProducts.items),
+          create: (_) => ProductsState('', []),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Order(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => Auth(),
         ),
       ],
       //MaterialApp es rebuilt cuando Auth cambia

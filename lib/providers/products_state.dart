@@ -11,6 +11,9 @@ import '../constants/endpoints.dart';
 class ProductsState with ChangeNotifier {
   RestApiService _helper = RestApiService();
   List<Product> _items = [];
+  final String authToken;
+
+  ProductsState(this.authToken, _items);
 
   List<Product> get items {
     return [..._items];
@@ -26,8 +29,8 @@ class ProductsState with ChangeNotifier {
 
   Future<void> fetchProducts() async {
     try {
-      final response =
-          await _helper.get(Endpoints.products) as Map<String, dynamic>;
+      final response = await _helper
+          .get(Endpoints.products + '?auth=$authToken') as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
       response.forEach((key, product) {
         loadedProducts.add(Product(
@@ -51,7 +54,7 @@ class ProductsState with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     try {
       final response = await _helper.post(
-        Endpoints.products,
+        Endpoints.products + '?auth=$authToken',
         json.encode({
           'title': product.title,
           'description': product.description,
@@ -79,7 +82,7 @@ class ProductsState with ChangeNotifier {
   Future<void> updateProduct(Product product) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == product.id);
     if (prodIndex >= 0) {
-      final url = Endpoints.product + '${product.id}.json';
+      final url = Endpoints.product + '${product.id}.json' + '?auth=$authToken';
       await _helper.patch(
           url,
           json.encode({
@@ -99,7 +102,7 @@ class ProductsState with ChangeNotifier {
   */
   void removeProduct(String id) {
     //optimistic updating
-    final url = Endpoints.product + '$id.json';
+    final url = Endpoints.product + '$id.json' + '?auth=$authToken';
     final copyProductId = _items.indexWhere((prod) => prod.id == id);
     var copyProduct = _items[copyProductId];
     _items.removeAt(copyProductId);

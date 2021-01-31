@@ -45,8 +45,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       //MaterialApp es rebuilt cuando Auth cambia
-      child: Consumer<Auth>(
-        builder: (ctx, auth, child) => MaterialApp(
+      child: Consumer<Auth>(builder: (ctx, auth, child) {
+        ifAuth(targetScreen) => auth.isAuth ? targetScreen : AuthScreen();
+        return MaterialApp(
           title: 'MiTienda',
           theme: ThemeData(
             primaryColor: Colors.teal,
@@ -55,14 +56,15 @@ class MyApp extends StatelessWidget {
           ),
           home: auth.isAuth ? ProductsScreen() : AuthScreen(),
           routes: {
-            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-            CartScreen.routeName: (ctx) => CartScreen(),
-            OrdersScreen.routeName: (ctx) => OrdersScreen(),
-            UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-            ProductFormScreen.routeName: (ctx) => ProductFormScreen(),
+            ProductDetailScreen.routeName: (ctx) =>
+                ifAuth(ProductDetailScreen()),
+            CartScreen.routeName: (ctx) => ifAuth(CartScreen()),
+            OrdersScreen.routeName: (ctx) => ifAuth(OrdersScreen()),
+            UserProductsScreen.routeName: (ctx) => ifAuth(UserProductsScreen()),
+            ProductFormScreen.routeName: (ctx) => ifAuth(ProductFormScreen()),
           },
-        ),
-      ),
+        );
+      }),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../api/rest_api_service.dart';
@@ -9,6 +10,7 @@ class Auth with ChangeNotifier {
   String _token;
   DateTime _expiryDate;
   String _userId;
+  Timer _authTimer;
 
   RestApiService _helper = RestApiService();
 
@@ -55,9 +57,29 @@ class Auth with ChangeNotifier {
       _userId = response['localId'];
       _expiryDate = DateTime.now()
           .add(Duration(seconds: int.parse(response['expiresIn'])));
+      _autoLogout();
       notifyListeners();
     } catch (error) {
       throw error;
     }
+  }
+
+  void logout() {
+    _token = null;
+    _expiryDate = null;
+    _userId = null;
+    if (_authTimer != null) {
+      _authTimer.cancel();
+      _authTimer = null;
+    }
+    notifyListeners();
+  }
+
+  void _autoLogout() {
+    if (_authTimer != null) {
+      _authTimer.cancel();
+    }
+    final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
+    _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
   }
 }
